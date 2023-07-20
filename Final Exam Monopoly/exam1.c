@@ -92,12 +92,6 @@ PropAList readTitleDeed(char filename[], char mode[]) {
 		titlesArray.count++;
 	}
 	
-//	printf("%d", titlesArray.count);
-//	int i;
-//	for(i = 0; i < titlesArray.count; i++) {
-//		printf("%d - %s - %s\n", titlesArray.lot[i].id, titlesArray.lot[i].name, titlesArray.lot[i].color);
-//	}
-	
 	return titlesArray;
 	fclose(readTitles);
 }
