@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 typedef struct {
 	int id;
@@ -59,45 +60,105 @@ typedef struct {
 //  0 owned by bank, id of the player if lot is owned by a player
 //  initial value of board lot 0, *0, -1, *0, -4, -8, !0, -2, !0, !0, -5, *0, -6, *0, *0, -9, !0, -1, !0, !0, -3, *0, -2, *0, *0, -10, !0, !0, -7, !0, -12, *0, *0, -1, *0, -11, -2, !0, -4, !0
 
-PropAList readTitleDeed(char filename[], char mode[]);
-void displayTitleDeed(TitleDeed td);
+// must implement
+void initGameBoard(GameBoard *board);
+bool addPlayer(GameBoard *board, int player_id);
+
+// place the other function prototypes needed
 
 int main(int argc, char *argv[]) {
-	// Get all the title deeds in "titledeed.cis" file and store as a Property Array List using PropAList
-	PropAList titles; // array list
-	titles = readTitleDeed("titledeed.cis", "rb");
-	
-	// Display all title deed by repeatedly calling the displayTitleDeed()
-	int i;
-	for (i = 0; i < titles.count; i++) {
-		displayTitleDeed(titles.lot[i]);
-	}
+	GameBoard board;
+	initGameBoard(&board);
 	
 	return 0;
 }
 
-PropAList readTitleDeed(char filename[], char mode[]) { 
-	// To do code logic for readTitles from file.
-	FILE *readTitles;
-	readTitles = fopen(filename, mode);
+void initGameBoard(GameBoard *board) {
+	board->ownedBank = NULL;
 	TitleDeed titles;
 	
-	PropAList titlesArray;
-	titlesArray.count = 0;
-	titlesArray.lot = malloc(sizeof(TitleDeed));
+	FILE *fp;
 	
-	while(fread(&titles, sizeof(TitleDeed), 1, readTitles)) {
-		titlesArray.lot = realloc(titlesArray.lot, (titlesArray.count + 1) * sizeof(TitleDeed));
-		titlesArray.lot[titlesArray.count] = titles;
-		titlesArray.count++;
+	// Owned by bank title deeds retrieves all titles from the file
+	fp = fopen("titledeed.cis", "rb");
+	while(fread(&titles, sizeof(TitleDeed), 1, fp)) {
+		PropLList newNode = malloc(sizeof(Prop));
+		newNode->lot = titles;
+		newNode->next = board->ownedBank;
+		board->ownedBank = newNode;
 	}
 	
-	return titlesArray;
-	fclose(readTitles);
+	
+	// Setting board lot into the designated values
+	while (board->ownedBank != NULL) {
+		board->boardLot[board->ownedBank->lot.id] = 0;
+		board->ownedBank = board->ownedBank->next;
+	}
+	int i = 0;
+	while (i < 40) {
+		if (i == 0) {
+			board->boardLot[i] = 0;
+		}
+		if (i == 2 || i == 17 || i == 33) { // Community Chests
+			board->boardLot[i] = -1;
+		} if (i == 7 || i == 22 || i == 36) { // Chance Marked as ?
+			board->boardLot[i] = -2;
+		} if (i == 20) {
+			board->boardLot[i] = -3;
+		} if (i == 4) {
+			board->boardLot[i] = -4;
+		} if (i == 10) {
+			board->boardLot[i] = -5;
+		} if (i == 12) {
+			board->boardLot[i] = -6;
+		} if (i == 28) {
+			board->boardLot[i] = -7;
+		} if (i == 5) {
+			board->boardLot[i] = -8;
+		} if (i == 15) {
+			board->boardLot[i] = -9;
+		} if (i == 25) {
+			board->boardLot[i] = -10;
+		} if (i == 35) {
+			board->boardLot[i] = -11;
+		} if (i == 30) {
+			board->boardLot[i] = -12;
+		}
+		i++;
+		
+//		printf("%d - %s - %s\n", board->ownedBank->lot.id, board->ownedBank->lot.name, board->ownedBank->lot.color);
+//		board->ownedBank = board->ownedBank->next;
+	}
+	
+	int j;
+	for(j = 0; j < 40; j++) {
+		printf("Lot[%d] : %d\n", j, board->boardLot[j]);
+	}
+	
+	board->moneyCount[0] = 500 * 30;
+	board->moneyCount[1] = 100 * 30;
+	board->moneyCount[2] = 50 * 30;
+	board->moneyCount[3] = 20 * 30;
+	board->moneyCount[4] = 10 * 30;
+	board->moneyCount[5] = 5 * 30;
+	board->moneyCount[6] = 1 * 30;
+	
+	int k;
+	board->totalMoney = 0;
+	int total = 0;
+	for (k = 0; k < 7; k++) {
+		board->totalMoney += board->moneyCount[k];
+	}
+	
+	printf("\nTotal Money: $%.2lf\n", board->totalMoney);
+	
+	
+	
+
+	
+	fclose(fp);
+	
 }
 
-void displayTitleDeed(TitleDeed td) {
-	printf("%2d - %30s - %15s\n", td.id, td.name, td.color);
-}
 
 
