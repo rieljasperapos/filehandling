@@ -105,7 +105,7 @@ void initGameBoard(GameBoard *board) {
 			board->boardLot[i] = -2;
 		} if (i == 20) {
 			board->boardLot[i] = -3;
-		} if (i == 4) {
+		} if (i == 4 || i == 38) {
 			board->boardLot[i] = -4;
 		} if (i == 10) {
 			board->boardLot[i] = -5;
