@@ -87,8 +87,6 @@ void initGameBoard(GameBoard *board) {
 		newNode->next = board->ownedBank;
 		board->ownedBank = newNode;
 	}
-	
-	
 	// Setting board lot into the designated values
 	while (board->ownedBank != NULL) {
 		board->boardLot[board->ownedBank->lot.id] = 0;
@@ -125,9 +123,6 @@ void initGameBoard(GameBoard *board) {
 			board->boardLot[i] = -12;
 		}
 		i++;
-		
-//		printf("%d - %s - %s\n", board->ownedBank->lot.id, board->ownedBank->lot.name, board->ownedBank->lot.color);
-//		board->ownedBank = board->ownedBank->next;
 	}
 	
 	int j;
@@ -142,22 +137,37 @@ void initGameBoard(GameBoard *board) {
 	board->moneyCount[4] = 10 * 30;
 	board->moneyCount[5] = 5 * 30;
 	board->moneyCount[6] = 1 * 30;
-	
+
 	int k;
 	board->totalMoney = 0;
 	int total = 0;
 	for (k = 0; k < 7; k++) {
 		board->totalMoney += board->moneyCount[k];
 	}
-	
 	printf("\nTotal Money: $%.2lf\n", board->totalMoney);
-	
-	
-	
 
-	
+	// Initialize the players to empty
+	board->playerCount = 0;
+	for (int i = 0; i < 8; i++) {
+		board->players[i].id = 0;
+	}
+	for (int i = 0; i < 8; i++) {
+		if (board->players[i].id != 0) {
+			board->playerCount++;
+		}
+	}
+	printf("Player Count: %d\n", board->playerCount);
+
+	board->houseCount = 32;
+	printf("House Count: %d\n", board->houseCount);
+	board->hotelCount = 12;
+	printf("Hotel Count: %d\n", board->hotelCount);
+
 	fclose(fp);
-	
+}
+
+bool addPlayer(GameBoard *board, int player_id) {
+
 }
 
 
