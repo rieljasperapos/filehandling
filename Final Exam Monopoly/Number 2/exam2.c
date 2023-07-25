@@ -73,9 +73,9 @@ int main(int argc, char *argv[]) {
 	// Added 3 player
 	addPlayer(&board, 69);
 	printf("Player Count: %d\n", board.playerCount);
-	addPlayer(&board, 69);
+	addPlayer(&board, 420);
 	printf("Player Count: %d\n", board.playerCount);
-	addPlayer(&board, 69);
+	addPlayer(&board, 19);
 	printf("Player Count: %d\n", board.playerCount);
 	
 	return 0;
@@ -176,7 +176,9 @@ void initGameBoard(GameBoard *board) {
 
 bool addPlayer(GameBoard *board, int player_id) {
 	printf("\n");
+	board->players[board->playerCount].id = player_id;
 	printf("Active Player #%d\n", board->playerCount + 1);
+	printf("Player ID: %d\n", board->players[board->playerCount].id);
 	// Starting Position set as 0
 	board->players[board->playerCount].position = 0;
 
