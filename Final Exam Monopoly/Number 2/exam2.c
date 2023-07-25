@@ -69,6 +69,8 @@ bool addPlayer(GameBoard *board, int player_id);
 int main(int argc, char *argv[]) {
 	GameBoard board;
 	initGameBoard(&board);
+	addPlayer(&board, 69);
+	printf("Player Count: %d\n", board.playerCount);
 	
 	return 0;
 }
@@ -167,7 +169,31 @@ void initGameBoard(GameBoard *board) {
 }
 
 bool addPlayer(GameBoard *board, int player_id) {
+	printf("\n");
+	printf("Active Player #%d\n", board->playerCount + 1);
+	// Starting Position set as 0
+	board->players[board->playerCount].position = 0;
 
+	// Properties owned set to empty
+	board->players[board->playerCount].owned = NULL;
+
+	// Player will initially receive 2pcs - $500, 2pcs - $100, 2pcs - $50, 6pcs - $20, 5pcs - $10, 5pcs - $5
+	board->players[board->playerCount].moneyCount[0] = 500 * 2;
+	board->players[board->playerCount].moneyCount[1] = 100 * 2;
+	board->players[board->playerCount].moneyCount[2] = 50 * 2;
+	board->players[board->playerCount].moneyCount[3] = 20 * 6;
+	board->players[board->playerCount].moneyCount[4] = 10 * 5;
+	board->players[board->playerCount].moneyCount[5] = 5 * 5;
+	board->players[board->playerCount].moneyCount[6] = 1 * 5;
+
+	board->players[board->players->position].totalMoney = 0;
+
+	// Total money of the player adds up based from the money count array
+	for (int i = 0; i < 7; i++) {
+		board->players[board->players->position].totalMoney += board->players[board->players->position].moneyCount[i];
+	}
+	printf("Total Money: $%.2lf\n", board->players[board->players->position].totalMoney);
+	board->playerCount++;
 }
 
 
