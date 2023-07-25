@@ -69,6 +69,12 @@ bool addPlayer(GameBoard *board, int player_id);
 int main(int argc, char *argv[]) {
 	GameBoard board;
 	initGameBoard(&board);
+
+	// Added 3 player
+	addPlayer(&board, 69);
+	printf("Player Count: %d\n", board.playerCount);
+	addPlayer(&board, 69);
+	printf("Player Count: %d\n", board.playerCount);
 	addPlayer(&board, 69);
 	printf("Player Count: %d\n", board.playerCount);
 	
