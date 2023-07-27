@@ -120,10 +120,11 @@ int main(int argc, char *argv[]) {
 	acquireProperty(&board, board.players[2].id, 39);
 	acquireProperty(&board, board.players[2].id, 37);
 
-	printf("\nPlayer %d\n", board.players[1].id);
+	printf("\nPlayer %d\n\n", board.players[1].id);
 	displayTitleDeeds(board.players[1].owned);
-	printf("\nPlayer Money: %.2lf\n", board.players[1].totalMoney);
-	printf("Player %d\n", board.players[2].id);
+	printf("\nPlayer Money: %.2lf\n\n", board.players[1].totalMoney);
+	printf("=================================\n\n");
+	printf("Player %d\n\n", board.players[2].id);
 	displayTitleDeeds(board.players[2].owned);
 	printf("\nPlayer Money: %.2lf\n", board.players[2].totalMoney);
 
@@ -262,9 +263,12 @@ bool acquireProperty(GameBoard * board, int player_id, int property_id) {
 			break;
 		}
 	}
+
+	// IF THE TITLEDEEDS IS STILL OWNED BY THE BANK
+	PropLList *trav = &board->ownedBank;
 	board->boardLot[property_id] = player_id;
-	while (board->ownedBank != NULL) {
-		if (board->ownedBank->lot.id == property_id) {
+	while (*trav != NULL) {
+		if ((*trav)->lot.id == property_id && board->players[i].totalMoney > 400) {
 			SortedPropLList *trav;
 			trav = &board->players[i].owned;
 			while (*trav != NULL && (*trav)->lot.id < property_id) {
@@ -274,44 +278,41 @@ bool acquireProperty(GameBoard * board, int player_id, int property_id) {
 			newNode->lot = board->ownedBank->lot;
 			newNode->next = *trav;
 			*trav = newNode;
-			printf("Name of the title deed: %s\n", board->ownedBank->lot.name);
-			if (strcmp(board->ownedBank->lot.color, "Brown") == 0) {
+			printf("Name of the title deed: %s\n", (*trav)->lot.name);
+			if (strcmp((*trav)->lot.color, "Brown") == 0) {
 				board->players[i].totalMoney -= 60;
-			} else if (strcmp(board->ownedBank->lot.name, "Connecticut Avenue") == 0) {
+			} else if (strcmp((*trav)->lot.name, "Connecticut Avenue") == 0) {
 				board->players[i].totalMoney -= 120;
-			} else if (strcmp(board->ownedBank->lot.color, "Light Blue") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Light Blue") == 0) {
 				board->players[i].totalMoney -= 100;
-			} else if (strcmp(board->ownedBank->lot.name, "Virginia Avenue") == 0) {
+			} else if (strcmp((*trav)->lot.name, "Virginia Avenue") == 0) {
 				board->players[i].totalMoney -= 160;
-			} else if (strcmp(board->ownedBank->lot.color, "Pink") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Pink") == 0) {
 				board->players[i].totalMoney -= 140;
-			} else if (strcmp(board->ownedBank->lot.name, "New York Avenue") == 0) {
+			} else if (strcmp((*trav)->lot.name, "New York Avenue") == 0) {
 				board->players[i].totalMoney -= 200;
-			} else if (strcmp(board->ownedBank->lot.color, "Orange") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Orange") == 0) {
 				board->players[i].totalMoney -= 180;
-			} else if (strcmp(board->ownedBank->lot.name, "Illinois Avenue") == 0) {
+			} else if (strcmp((*trav)->lot.name, "Illinois Avenue") == 0) {
 				board->players[i].totalMoney -= 240;
-			} else if (strcmp(board->ownedBank->lot.color, "Red") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Red") == 0) {
 				board->players[i].totalMoney -= 220;
-			} else if (strcmp(board->ownedBank->lot.name, "Marvin Gardens") == 0) {
+			} else if (strcmp((*trav)->lot.name, "Marvin Gardens") == 0) {
 				board->players[i].totalMoney -= 280;
-			} else if (strcmp(board->ownedBank->lot.color, "Yellow") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Yellow") == 0) {
 				board->players[i].totalMoney -= 260;
-			} else if (strcmp(board->ownedBank->lot.name, "Pennsylvania Avenue") == 0) {
+			} else if (strcmp((*trav)->lot.name, "Pennsylvania Avenue") == 0) {
 				board->players[i].totalMoney -= 320;
-			} else if (strcmp(board->ownedBank->lot.color, "Green") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Green") == 0) {
 				board->players[i].totalMoney -= 300;
-			} else if (strcmp(board->ownedBank->lot.name, "Boardwalk") == 0) {
+			} else if (strcmp((*trav)->lot.name, "Boardwalk") == 0) {
 				board->players[i].totalMoney -= 400;
-			} else if (strcmp(board->ownedBank->lot.color, "Dark Blue") == 0) {
+			} else if (strcmp((*trav)->lot.color, "Dark Blue") == 0) {
 				board->players[i].totalMoney -= 350;
 			}
-			printf("PLAYERS MONEY: %.2lf\n", board->players[i].totalMoney);
-			printf("VALUE OF I: %d\n", i);
 		}
-		board->ownedBank = board->ownedBank->next;
+		*trav = (*trav)->next;
 	}
-	
 	// displayTitleDeeds(list);
 }
 
